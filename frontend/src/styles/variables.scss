@@ -1,0 +1,53 @@
+// 使用 @forward 代替 @import
+@forward 'element-plus/theme-chalk/src/common/var.scss' as element-*;
+
+// 使用 SCSS 模块系统
+:root {
+  // 主色调
+  --primary-color: #1890ff;
+  --primary-light: #40a9ff;
+  --primary-dark: #096dd9;
+
+  // 背景色
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f7fa;
+
+  // 文字颜色
+  --text-primary: #2c3e50;
+  --text-secondary: #606266;
+
+  // 边框颜色
+  --border-color: #dcdfe6;
+  --border-light: #e4e7ed;
+
+  // 状态颜色
+  --success-color: #67c23a;
+  --warning-color: #e6a23c;
+  --danger-color: #f56c6c;
+  --info-color: #909399;
+
+  // 阴影
+  --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.12);
+  --box-shadow-dark: 0 2px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+// 暗色主题
+html[data-theme='dark'] {
+  --primary-color: #177ddc;
+  --primary-light: #1890ff;
+  --primary-dark: #0050b3;
+
+  --bg-primary: #141414;
+  --bg-secondary: #1f1f1f;
+
+  --text-primary: rgba(255, 255, 255, 0.85);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+
+  --border-color: #434343;
+  --border-light: #303030;
+
+  --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+  --box-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --box-shadow-dark: 0 2px 16px 0 rgba(0, 0, 0, 0.5);
+} 

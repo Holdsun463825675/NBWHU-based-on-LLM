@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.DailyWordStatusMapper">
+    <resultMap id="DailyWordStatusMap" type="whu.english_learn.entity.DailyWordStatus">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="wordId" column="word_id"/>
+        <result property="status" column="status"/>
+        <result property="promptTimes" column="prompt_times"/>
+        <result property="date" column="date"/>
+        <association property="word" javaType="whu.english_learn.dto.WordTestDTO">
+            <id property="id" column="w_id"/>
+            <result property="word" column="w_word"/>
+            <result property="phonetic" column="w_phonetic"/>
+            <result property="chineseDefinition" column="w_chinese_definition1"/>
+            <result property="confusion1" column="w_confusion1"/>
+            <result property="confusion2" column="w_confusion2"/>
+            <result property="confusion3" column="w_confusion3"/>
+            <result property="confusion1Chinese" column="w_confusion1_chinese"/>
+            <result property="confusion2Chinese" column="w_confusion2_chinese"/>
+            <result property="confusion3Chinese" column="w_confusion3_chinese"/>
+        </association>
+    </resultMap>
+
+    <select id="getDailyWordsByUserIdAndDate" resultMap="DailyWordStatusMap">
+        SELECT 
+            d.id,
+            d.user_id,
+            d.word_id,
+            d.status,
+            d.prompt_times,
+            d.date,
+            w.id as w_id,
+            w.word as w_word,
+            w.phonetic as w_phonetic,
+            w.chinese_definition_1 as w_chinese_definition1,
+            w.confusion_1 as w_confusion1,
+            w.confusion_2 as w_confusion2,
+            w.confusion_3 as w_confusion3,
+            c1.chinese_definition_1 as w_confusion1_chinese,
+            c2.chinese_definition_1 as w_confusion2_chinese,
+            c3.chinese_definition_1 as w_confusion3_chinese
+        FROM daily_word_statu d
+        LEFT JOIN word w ON d.word_id = w.id
+        LEFT JOIN synonym_and_confusion c1 ON w.confusion_1 = c1.word
+        LEFT JOIN synonym_and_confusion c2 ON w.confusion_2 = c2.word
+        LEFT JOIN synonym_and_confusion c3 ON w.confusion_3 = c3.word
+        LEFT JOIN word_test_statu wts ON d.word_id = wts.word_id
+            AND d.user_id = wts.user_id 
+            AND DATE(d.date) = DATE(wts.date)
+        WHERE d.user_id = #{userId}
+        AND DATE(d.date) = DATE(#{date})
+        AND wts.id IS NULL  -- 排除已经测试过的单词
+        ORDER BY d.id ASC
+    </select>
+
+
+    <insert id="insert">
+        insert into daily_word_statu (id, user_id, word_id, status, prompt_times, date)
+        values (#{id}, #{userId}, #{wordId}, #{status}, #{promptTimes}, #{date})
+    </insert>
+
+    <update id="updateKnownStatus">
+        update daily_word_statu
+        set status = status - 1
+        where
+            user_id = (
+                select id from user where username = #{username}
+            )
+          and word_id = (
+            select id from word where word = #{word}
+        )
+          and DATE(date) = DATE(#{date})
+    </update>
+
+    <update id="updateUnknownStatus">
+        update daily_word_statu
+        set status = 3, prompt_times = prompt_times + 1, skip_count = 5
+        where
+            user_id = (
+                select id from user where username = #{username}
+            )
+          and word_id = (
+            select id from word where word = #{word}
+        )
+          and DATE(date) = DATE(#{date})
+    </update>
+
+    <update id="updateEasyStatus">
+        update daily_word_statu
+        set status = 0
+        where
+            user_id = (
+                select id from user where username = #{username}
+            )
+          and word_id = (
+            select id from word where word = #{word}
+        )
+          and DATE(date) = DATE(#{date})
+    </update>
+
+    <update id="decrementSkipCounts">
+        UPDATE daily_word_statu
+        SET skip_count = GREATEST(skip_count - 1, 0)
+        WHERE user_id = #{userId}
+        AND DATE(date) = DATE(#{date})
+    </update>
+
+    <select id="getLearningWords" resultType="whu.english_learn.entity.DailyWordStatus">
+        select * from daily_word_statu
+        where
+            user_id = #{userId}
+            and DATE(date) = DATE(#{date})
+            and status > 0
+            and word_id != #{wordId}
+        order by
+            (sqrt(prompt_times) + status * 0.5) DESC,
+            RAND() * 2 <!-- 添加数据库层随机 -->
+        limit #{planNumber}
+    </select>
+
+    <select id="getCurrentStatus" resultType="whu.english_learn.entity.DailyWordStatus">
+        select * from daily_word_statu
+        where user_id = #{userId}
+          and word_id = #{wordId}
+          and DATE(date) = DATE(#{date})
+    </select>
+
+    <delete  id="deleteByUserId">
+            delete from daily_word_statu where user_id = #{userId} and DATE(date) = DATE(#{date})
+    </delete>
+
+</mapper>

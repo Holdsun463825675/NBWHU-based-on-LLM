@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.DialogueRecordMapper">
+    
+    <insert id="insert" parameterType="whu.english_learn.entity.DialogueRecord">
+        INSERT INTO dialogue_record (id, dialogue_id, content, timestamp, role)
+        VALUES (#{id}, #{dialogueId}, #{content}, #{timestamp}, #{role})
+    </insert>
+
+    <select id="getRecordsByDialogueId" resultType="whu.english_learn.entity.DialogueRecord">
+        SELECT id, dialogue_id, content, timestamp, role
+        FROM dialogue_record
+        WHERE dialogue_id = #{dialogueId}
+        ORDER BY timestamp ASC
+    </select>
+</mapper> 

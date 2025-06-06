@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.DialogueMapper">
+    
+    <insert id="insert" parameterType="whu.english_learn.entity.Dialogue">
+        INSERT INTO dialogue (id, user_id, name, theme, build_time, update_time)
+        VALUES (#{id}, #{userId}, #{name}, #{theme}, #{buildTime}, #{updateTime})
+    </insert>
+
+    <update id="updateUpdateTime">
+        UPDATE dialogue
+        SET update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getDialogueIdsByUserId" resultType="string">
+        SELECT id
+        FROM dialogue
+        WHERE user_id = #{userId}
+        ORDER BY update_time DESC
+    </select>
+
+    <select id="getDialoguesByUserId" resultType="whu.english_learn.entity.Dialogue">
+        SELECT id, user_id as userId, name, theme, build_time as buildTime, update_time as updateTime
+        FROM dialogue
+        WHERE user_id = #{userId}
+        ORDER BY update_time DESC
+    </select>
+</mapper> 

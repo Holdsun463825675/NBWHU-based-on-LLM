@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.WordMapper">
+<!--    根据单词数获取单词-->
+    <select id="getWordsByTags" resultType="whu.english_learn.entity.Word">
+        select * from word where tag_1 = #{tags} or tag_2 = #{tags} or tag_3 = #{tags}
+    </select>
+    <select id="getWordIdByWord" resultType="java.lang.String">
+        select id from word where word = #{word}
+    </select>
+
+    <select id="getWordsByIds" resultType="whu.english_learn.entity.Word">
+        select *
+        from word
+        where id in
+        <foreach collection="wordIds" item="wordId" open="(" separator="," close=")">
+            #{wordId}
+        </foreach>
+    </select>
+    <select id="getWordByName" resultType="whu.english_learn.entity.Word">
+        select * from word where word = #{word}
+    </select>
+</mapper>

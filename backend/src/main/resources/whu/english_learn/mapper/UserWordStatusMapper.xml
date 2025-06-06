@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.UserWordStatusMapper">
+    <insert id="insert" parameterType="UserWordStatus">
+        insert into user_word_statu
+            (id, user_id, word_id, status, important_index)
+        values
+            (#{id}, #{userId}, #{wordId}, #{status}, #{importantIndex})
+    </insert>
+
+    <update id="updateStatus">
+        update user_word_statu
+        set status = #{status}
+        where user_id = #{userId} and word_id = #{wordId}
+    </update>
+
+    <update id="updateWordStatus">
+        update user_word_statu
+        set status = #{status}
+        where
+            user_id = (
+                select id from user where username = #{username} limit 1
+            )
+          and word_id = (
+            select id from word where word = #{word} limit 1
+        )
+    </update>
+
+    <select id="exists" resultType="integer">
+        select 1
+        from user_word_statu
+        where user_id = #{userId} and word_id = #{wordId}
+        limit 1
+    </select>
+
+</mapper>

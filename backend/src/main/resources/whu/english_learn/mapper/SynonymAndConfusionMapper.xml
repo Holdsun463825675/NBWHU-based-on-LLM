@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.SynonymAndConfusionMapper">
+    <resultMap id="SynonymAndConfusionMap" type="whu.english_learn.entity.SynonymAndConfusion">
+        <id property="id" column="id"/>
+        <result property="word" column="word"/>
+        <result property="chineseDefinition1" column="chinese_definition_1"/>
+        <result property="chineseDefinition2" column="chinese_definition_2"/>
+        <result property="chineseDefinition3" column="chinese_definition_3"/>
+        <result property="chineseDefinition4" column="chinese_definition_4"/>
+        <result property="chineseDefinition5" column="chinese_definition_5"/>
+    </resultMap>
+
+    <select id="getByWord" resultMap="SynonymAndConfusionMap">
+        SELECT * FROM synonym_and_confusion 
+        WHERE word = #{word}
+    </select>
+</mapper> 

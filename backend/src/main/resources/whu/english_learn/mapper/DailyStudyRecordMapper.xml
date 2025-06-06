@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.DailyStudyRecordMapper">
+
+    <insert id="insert">
+         insert into daily_study_record (id, user_id, plan_number, learned_number, date)
+         values (#{id}, #{userId}, #{planNumber}, #{learnedNumber}, #{date,jdbcType=DATE})
+    </insert>
+
+    <select id="getplanNumberByUserId" resultType="java.lang.Integer">
+         select plan_number from daily_study_record where user_id = #{userId}
+         order by date desc limit 1
+    </select>
+
+    <select id="getTodayRecord" resultType="whu.english_learn.entity.DailyStudyRecord">
+        select * from daily_study_record where user_id = #{userId} and DATE(date) = DATE(#{date})
+    </select>
+
+    <select id="getLearnedNumber" resultType="java.lang.Integer">
+        select learned_number from daily_study_record where user_id = #{userId} and date = DATE(#{date})
+    </select>
+
+
+    <update id="updateLearnedNumber">
+        update daily_study_record set learned_number = #{learnedNumber} where id = #{id}
+    </update>
+
+    <update id="incrementLearnedNumber">
+        update daily_study_record set learned_number = #{learnedNumber} where id = #{id}
+    </update>
+</mapper>

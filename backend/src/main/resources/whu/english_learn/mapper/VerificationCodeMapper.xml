@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.VerificationCodeMapper">
+
+    <insert id="addCode">
+        insert into verification_code (code,email)
+        values (#{code}, #{email});
+    </insert>
+
+    <delete id="deleteCode">
+        delete from verification_code where code = #{code} and email =#{email};
+    </delete>
+
+    <select id="getCode" resultType="java.lang.String">
+        select code from verification_code where email = #{email};
+    </select>
+</mapper>

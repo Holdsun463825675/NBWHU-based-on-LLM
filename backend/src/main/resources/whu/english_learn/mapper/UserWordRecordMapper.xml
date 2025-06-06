@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="whu.english_learn.mapper.UserWordRecordMapper">
+
+    <insert id="insert">
+        insert into user_word_record (id, user_id, word_id)
+        values (#{id}, #{userId}, #{wordId})
+    </insert>
+
+    <delete id="delete">
+        delete from user_word_record where user_id = #{userId} and word_id = #{wordId}
+    </delete>
+
+    <select id="getAllWordsInWordRecord" resultType="java.lang.String">
+        select word_id from user_word_record where user_id = #{userId}
+    </select>
+</mapper>
