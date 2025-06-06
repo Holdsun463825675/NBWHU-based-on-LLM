@@ -5,7 +5,7 @@ import mysql.connector
 import uuid
 
 # === Excel 文件路径与读取 ===
-file_path = r"数据集\dataset.xlsx"
+file_path = r"dataset.xlsx"
 df1 = pd.read_excel(file_path, sheet_name="Sheet1", skiprows=1)
 df2 = pd.read_excel(file_path, sheet_name="Sheet2", skiprows=1)
 
